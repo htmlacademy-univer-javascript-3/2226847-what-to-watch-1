@@ -1,13 +1,14 @@
-import { FilmList, GenresList, ShowMoreButton } from '../../components';
+import { FilmList, GenresList, ShowMoreButton, Footer, SignIn, SignOut, Logo } from '../../components';
 import {Link} from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { useState } from 'react';
-import { FILM_IN_PAGE } from '../../const';
+import { FILM_IN_PAGE, AuthStatus } from '../../const';
 
 const MainPage = (): JSX.Element => {
   const films = useAppSelector((state) => state.films);
   const filteredFilms = useAppSelector((state) => state.filteredFilms);
   const [showedFilmsCount, changeShowedFilmsCount] = useState<number>(FILM_IN_PAGE);
+  const authStatus = useAppSelector((state) => state.authStatus);
 
   return (
     <>
@@ -51,24 +52,9 @@ const MainPage = (): JSX.Element => {
         <h1 className="visually-hidden">WTW</h1>
 
         <header className="page-header film-card__head">
-          <div className="logo">
-            <a className="logo__link">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
+          <Logo/>
 
-          <ul className="user-block">
-            <li className="user-block__item">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-              </div>
-            </li>
-            <li className="user-block__item">
-              <a className="user-block__link">Sign out</a>
-            </li>
-          </ul>
+          {authStatus === AuthStatus.Auth ? <SignOut/> : <SignIn/>}
         </header>
 
         <div className="film-card__wrap">
@@ -119,19 +105,7 @@ const MainPage = (): JSX.Element => {
           }
         </section>
 
-        <footer className="page-footer">
-          <div className="logo">
-            <a className="logo__link logo__link--light">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
-
-          <div className="copyright">
-            <p>© 2019 What to watch Ltd.</p>
-          </div>
-        </footer>
+        <Footer/>
       </div>
     </>
   );

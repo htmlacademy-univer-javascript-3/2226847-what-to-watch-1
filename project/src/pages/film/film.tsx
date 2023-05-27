@@ -1,7 +1,7 @@
 import {Link, Navigate, useParams} from 'react-router-dom';
-import { AppRoute } from '../../const';
+import { AppRoute, AuthStatus } from '../../const';
 import ReviewType from '../../types/review-type';
-import { RelatedFilms, Tabs } from '../../components';
+import { RelatedFilms, Tabs, Footer, Logo, SignIn, SignOut } from '../../components';
 import { useAppSelector } from '../../hooks';
 
 type FilmPageProps = {
@@ -12,6 +12,7 @@ const Film = (props: FilmPageProps): JSX.Element => {
   const id = Number(useParams().id);
   const films = useAppSelector((state) => state.films);
   const film = films.find((f) => f.id === id);
+  const authStatus = useAppSelector((state) => state.authStatus);
 
   if (!film) {
     return (<Navigate to={AppRoute.NotFound}/>);
@@ -27,24 +28,9 @@ const Film = (props: FilmPageProps): JSX.Element => {
             <h1 className="visually-hidden">WTW</h1>
 
             <header className="page-header film-card__head">
-              <div className="logo">
-                <a href="main.html" className="logo__link">
-                  <span className="logo__letter logo__letter--1">W</span>
-                  <span className="logo__letter logo__letter--2">T</span>
-                  <span className="logo__letter logo__letter--3">W</span>
-                </a>
-              </div>
+              <Logo />
 
-              <ul className="user-block">
-                <li className="user-block__item">
-                  <div className="user-block__avatar">
-                    <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-                  </div>
-                </li>
-                <li className="user-block__item">
-                  <a className="user-block__link">Sign out</a>
-                </li>
-              </ul>
+              {authStatus === AuthStatus.Auth ? <SignOut/> : <SignIn/>}
             </header>
 
             <div className="film-card__wrap">
@@ -97,19 +83,7 @@ const Film = (props: FilmPageProps): JSX.Element => {
             </div>
           </section>
 
-          <footer className="page-footer">
-            <div className="logo">
-              <a href="main.html" className="logo__link logo__link--light">
-                <span className="logo__letter logo__letter--1">W</span>
-                <span className="logo__letter logo__letter--2">T</span>
-                <span className="logo__letter logo__letter--3">W</span>
-              </a>
-            </div>
-
-            <div className="copyright">
-              <p>© 2019 What to watch Ltd.</p>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </>
     );
